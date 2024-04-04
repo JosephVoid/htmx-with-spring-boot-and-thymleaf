@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{fragments/head ::head}"></head>
+  <body class="loginbody">
+    <div class="m-auto form-cont">
+      <h1>Login</h1>
+      <!-- Send form data to /login endpoint with POST -->
+      <form action="/login" method="post" class="loginform">
+        <input
+          type="text"
+          name="username"
+          id="username"
+          placeholder="Username"
+          class="mb-2"
+        />
+        <input
+          type="password"
+          name="password"
+          id="pass"
+          placeholder="Password"
+          class="mb-2"
+        />
+        <button class="btn btn-primary" type="submit">Login</button>
+      </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Include the head fragment by Thymeleaf -->
+  <head th:replace="~{fragments/head ::head}"></head>
+  <body>
+    <div class="container">
+      <div>
+        <h1 class="mb-4 mt-4">Dashboard</h1>
+        <button class="btn btn-sm btn-info" hx-post="/logout">Log Out</button>
+        <div class="d-flex justify-content-between">
+          <h2 class="mb-4">People</h2>
+          <!-- Request the /refresh endpoint with a GET -->
+          <button
+            class="btn btn-primary btn-xs"
+            hx-get="/refresh"
+            hx-target="table"
+          >
+            Refresh
+          </button>
+        </div>
+        <table class="table table-striped" style="table-layout: fixed">
+          <thead>
+            <td>Id</td>
+            <td>Name</td>
+            <td>Description</td>
+            <td>Action</td>
+          </thead>
+          <tbody id="main_table">
+            <tr th:id="'id_' + ${row.id}" th:each="row : ${rows}">
+              <td th:text="${row.id}"></td>
+              <td th:text="${row.name}"></td>
+              <td th:text="${row.desc}"></td>
+              <td>
+                <button
+                  class="btn btn-danger"
+                  th:hx-delete="'/delete?id=' + ${row.id}"
+                  th:hx-target="'#id_' + ${row.id}"
+                >
+                  Delete
+                </button>
+                <button
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#editModal"
+                  th:hx-get="'/edit-form?id=' + ${row.id} +'&name='+ ${row.name} +'&desc='+ ${row.desc}"
+                  hx-target="#edit-dialog-body"
+                  hx-trigger="click"
+                >
+                  Edit
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#createModal"
+        >
+          Add New
+        </button>
+      </div>
+    </div>
+    <!-- Inlcude the modals -->
+    <div th:replace="~{fragments/dialog :: createmodal}"></div>
+    <div th:replace="~{fragments/dialog :: editmodal}"></div>
+  </body>
+</html>

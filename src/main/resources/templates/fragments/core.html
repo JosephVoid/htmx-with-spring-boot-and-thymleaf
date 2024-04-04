@@ -1,0 +1,100 @@
+<!-- This is the row fragment, it get returned but the /add or /edit endpoints, and gets
+    appended or replaced on the table -->
+<tr th:fragment="row" th:id="'id_' + ${item.id}">
+  <!-- Every ${} will be rendered by Thymeleaf and be replaced by an actual value, 
+    and th: means thymeleaf is ready to render it -->
+  <td th:text="${item.id}"></td>
+  <td th:text="${item.name}"></td>
+  <td th:text="${item.desc}"></td>
+  <td>
+    <!-- hx-delete to send the DELETE request, it auto removes the element specifed in hx-target -->
+    <button
+      class="btn btn-danger"
+      th:hx-delete="'/delete?id=' + ${item.id}"
+      th:hx-target="'#id_' + ${item.id}"
+    >
+      Delete
+    </button>
+    <!-- hx-get will send a GET request with a query parameter in this case,
+        and it replaces the element specified on the hx-target, hx-trigger specifies the event to 
+        trigger this
+    -->
+    <button
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#editModal"
+      th:hx-get="'/edit-form?id=' + ${item.id} +'&name='+ ${item.name} +'&desc='+ ${item.desc}"
+      hx-target="#edit-dialog-body"
+      hx-trigger="click"
+    >
+      Edit
+    </button>
+  </td>
+</tr>
+
+<!-- ------------------------------------------ -->
+<!-- This the entire table fragment, returned when /refersh is called -->
+<table
+  th:fragment="table"
+  class="table table-striped"
+  style="table-layout: fixed"
+>
+  <thead>
+    <td>Id</td>
+    <td>Name</td>
+    <td>Description</td>
+    <td>Action</td>
+  </thead>
+  <tr th:each="row : ${rows}">
+    <td th:text="${row.id}"></td>
+    <td th:text="${row.name}"></td>
+    <td th:text="${row.desc}"></td>
+    <td>
+      <button
+        class="btn btn-danger"
+        th:hx-delete="'/delete?id=' + ${row.id}"
+        th:hx-target="'#id_' + ${row.id}"
+      >
+        Delete
+      </button>
+      <button
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#editModal"
+        th:hx-get="'/edit-form?id=' + ${row.id} +'&name='+ ${row.name} +'&desc='+ ${row.desc}"
+        hx-target="#edit-dialog-body"
+        hx-trigger="click"
+      >
+        Edit
+      </button>
+    </td>
+  </tr>
+</table>
+
+<!-- This is the edit form, returned when request /edit-form, rendered in the modals -->
+<form
+  th:fragment="editform"
+  hx-post="/edit"
+  th:hx-target="'#id_' + ${id}"
+  hx-swap="outerHTML"
+  class="d-flex flex-column"
+>
+  <input type="text" name="id" placeholder="Id" class="mb-2" th:value="${id}" />
+  <input
+    type="text"
+    name="name"
+    placeholder="Name"
+    class="mb-2"
+    th:value="${name}"
+  />
+  <input
+    type="text"
+    name="desc"
+    placeholder="Description"
+    class="mb-2"
+    th:value="${desc}"
+  />
+  <button type="submit" class="btn btn-sm btn-primary" data-bs-dismiss="modal">
+    Edit
+  </button>
+</form>

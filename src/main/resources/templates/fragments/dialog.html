@@ -1,0 +1,81 @@
+<!-- The fragment rendered when edit button is clicked -->
+<div
+  th:fragment="editmodal"
+  class="modal fade"
+  id="editModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit</h5>
+        <button
+          type="button"
+          class="close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!-- The form here will be injected by HTMX dynamically -->
+      <div class="modal-body" id="edit-dialog-body">...</div>
+    </div>
+  </div>
+</div>
+
+<!-- The fragment rendered when clicking the add button -->
+<div
+  th:fragment="createmodal"
+  class="modal fade"
+  id="createModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="createModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createModalLabel">Add New</h5>
+        <button
+          type="button"
+          class="close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- On submit HTMX will send POST request to /add endpoint, and in this case appends the return html
+            at the end of the table, because we specifed beforeend -->
+        <form
+          hx-post="/add"
+          hx-target="#main_table"
+          hx-swap="beforeend"
+          class="d-flex flex-column"
+        >
+          <input type="text" name="id" placeholder="Id" class="mb-2" />
+          <input type="text" name="name" placeholder="Name" class="mb-2" />
+          <input
+            type="text"
+            name="desc"
+            placeholder="Description"
+            class="mb-2"
+          />
+          <button
+            type="submit"
+            class="btn btn-sm btn-primary"
+            data-bs-dismiss="modal"
+          >
+            Add
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
